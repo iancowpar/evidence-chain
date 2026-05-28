@@ -147,24 +147,12 @@ function App() {
             <h2>{pattern.title}</h2>
             <p>{pattern.description}</p>
           </div>
-          <div className="executive-memo" aria-label="Executive decision summary">
-            <span className="eyebrow">Decision Memo</span>
-            <strong>{decision.decision}</strong>
-            <dl>
-              <div>
-                <dt>Signals</dt>
-                <dd>{patternSignals.length}</dd>
-              </div>
-              <div>
-                <dt>Status</dt>
-                <dd>{decision.status}</dd>
-              </div>
-              <div>
-                <dt>Review</dt>
-                <dd>{decision.followUpDate}</dd>
-              </div>
-            </dl>
-          </div>
+          <ExecutiveDecisionMemo
+            decision={decision}
+            pattern={pattern}
+            selectedSignal={selectedSignal}
+            signalCount={patternSignals.length}
+          />
         </section>
 
         <section id="evidence" className="section-grid">
@@ -414,6 +402,66 @@ function ChainNode({
         <p>{body}</p>
       </div>
     </article>
+  );
+}
+
+function ExecutiveDecisionMemo({
+  decision,
+  pattern,
+  selectedSignal,
+  signalCount,
+}: {
+  decision: Decision;
+  pattern: Pattern;
+  selectedSignal?: Signal;
+  signalCount: number;
+}) {
+  const tradeoff =
+    "Make trust-critical state visible while keeping setup controls out of the daily scan path.";
+  const evidenceContribution = selectedSignal
+    ? `${selectedSignal.type} from ${selectedSignal.source}: ${selectedSignal.title}`
+    : `${signalCount} related signals support this pattern-level decision.`;
+
+  return (
+    <aside className="executive-memo" aria-label="Executive decision memo">
+      <div className="memo-title-row">
+        <span className="eyebrow">Executive Decision Memo</span>
+        <span className={`confidence-chip ${pattern.triadReview.confidence.toLowerCase()}`}>
+          {pattern.triadReview.confidence} confidence
+        </span>
+      </div>
+      <strong>{decision.decision}</strong>
+      <dl className="memo-grid">
+        <div className="wide">
+          <dt>Rationale</dt>
+          <dd>{decision.rationale}</dd>
+        </div>
+        <div>
+          <dt>Tradeoff</dt>
+          <dd>{tradeoff}</dd>
+        </div>
+        <div>
+          <dt>Primary risk</dt>
+          <dd>{decision.risks}</dd>
+        </div>
+        <div>
+          <dt>Success metric</dt>
+          <dd>{decision.successMetric}</dd>
+        </div>
+        <div>
+          <dt>Status</dt>
+          <dd>{decision.status}</dd>
+        </div>
+        <div>
+          <dt>Review date</dt>
+          <dd>{decision.followUpDate}</dd>
+        </div>
+        <div>
+          <dt>Evidence contribution</dt>
+          <dd>{evidenceContribution}</dd>
+        </div>
+      </dl>
+    </aside>
   );
 }
 

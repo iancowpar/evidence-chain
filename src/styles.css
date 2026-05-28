@@ -252,44 +252,83 @@ a {
 .executive-memo {
   display: grid;
   align-content: start;
-  gap: 14px;
+  gap: 12px;
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 16px;
   background: var(--panel-strong);
 }
 
-.executive-memo strong {
-  color: var(--ink);
-  font-size: 17px;
-  line-height: 1.35;
+.memo-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
-.executive-memo dl {
+.executive-memo strong {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.32;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.memo-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
   margin: 0;
 }
 
-.executive-memo div {
+.memo-grid div {
   border: 1px solid var(--line);
   border-radius: 8px;
-  padding: 10px;
+  padding: 9px;
   background: #ffffff;
 }
 
-.executive-memo dt {
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 700;
+.memo-grid .wide {
+  grid-column: 1 / -1;
 }
 
-.executive-memo dd {
-  margin: 8px 0 0;
-  color: var(--ink);
-  font-size: 16px;
+.memo-grid dt {
+  color: var(--muted);
+  font-size: 10px;
   font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.memo-grid dd {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 5px 0 0;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 750;
+  line-height: 1.38;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.memo-grid .wide dd {
+  -webkit-line-clamp: 3;
+}
+
+.confidence-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  border-radius: 999px;
+  padding: 0 9px;
+  background: #e9f7ef;
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 900;
+  white-space: nowrap;
 }
 
 .section-grid,
@@ -772,7 +811,7 @@ textarea {
   .topbar,
   .section-header,
   .panel-heading,
-  .hero-metrics,
+  .memo-grid,
   .triad-grid,
   .form-row,
   .nav-list {
