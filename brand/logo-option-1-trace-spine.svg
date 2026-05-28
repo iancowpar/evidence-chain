@@ -1,0 +1,20 @@
+<svg width="960" height="320" viewBox="0 0 960 320" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Evidence Chain logo option 1: Trace Spine</title>
+  <desc id="desc">A six-stage trace line mark paired with the Evidence Chain wordmark and tagline.</desc>
+  <rect width="960" height="320" rx="24" fill="#FFFFFF"/>
+  <rect x="1" y="1" width="958" height="318" rx="23" stroke="#D8DEE3"/>
+  <g transform="translate(72 102)">
+    <path d="M24 58H252" stroke="#2563EB" stroke-width="7" stroke-linecap="round"/>
+    <circle cx="24" cy="58" r="14" fill="#2563EB"/>
+    <circle cx="70" cy="58" r="10" fill="#FFFFFF" stroke="#2563EB" stroke-width="6"/>
+    <path d="M116 58L132 42L148 58L132 74L116 58Z" fill="#B7791F"/>
+    <path d="M176 45L203 72L238 37" stroke="#168A5B" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M263 58C263 73.464 250.464 86 235 86C219.536 86 207 73.464 207 58C207 42.536 219.536 30 235 30" stroke="#6D5BD0" stroke-width="7" stroke-linecap="round"/>
+    <path d="M236 30L250 30L250 44" stroke="#6D5BD0" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <g transform="translate(390 90)">
+    <text x="0" y="62" fill="#171717" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="54" font-weight="800" letter-spacing="0">Evidence Chain</text>
+    <text x="2" y="104" fill="#5F6B72" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="22" font-weight="600" letter-spacing="0">From raw signal to shipped product decision.</text>
+  </g>
+  <text x="72" y="275" fill="#5F6B72" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="15" font-weight="800" letter-spacing="1.8">OPTION 1 · TRACE SPINE</text>
+</svg>

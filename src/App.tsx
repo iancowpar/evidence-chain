@@ -5,7 +5,6 @@ import {
   Braces,
   CircleDot,
   ClipboardList,
-  GitBranch,
   History,
   Layers3,
   Lightbulb,
@@ -37,7 +36,7 @@ const signalTypes: SignalType[] = [
 ];
 
 const navItems = [
-  { label: "Evidence", icon: GitBranch },
+  { label: "Evidence", icon: CircleDot },
   { label: "Signals", icon: ClipboardList },
   { label: "Triad", icon: Layers3 },
   { label: "Decision", icon: BookOpenCheck },
@@ -160,7 +159,7 @@ function App() {
       <aside className="sidebar" aria-label="Evidence Chain navigation">
         <div className="brand-lockup">
           <span className="brand-mark">
-            <GitBranch size={20} aria-hidden="true" />
+            <img src="/brand/evidence-chain-mark.svg" alt="" />
           </span>
           <div>
             <strong>Evidence Chain</strong>

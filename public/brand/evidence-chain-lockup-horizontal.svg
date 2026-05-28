@@ -1,0 +1,19 @@
+<svg width="920" height="240" viewBox="0 0 920 240" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Evidence Chain horizontal lockup</title>
+  <desc id="desc">Evidence Chain mark, wordmark, and tagline.</desc>
+  <rect width="920" height="240" rx="28" fill="#FFFFFF"/>
+  <rect x="1" y="1" width="918" height="238" rx="27" stroke="#D8DEE3"/>
+  <g transform="translate(68 56)">
+    <rect width="128" height="128" rx="28" fill="#171717"/>
+    <path d="M26 64H102" stroke="#E8EDF2" stroke-width="8" stroke-linecap="round"/>
+    <circle cx="26" cy="64" r="9" fill="#2563EB"/>
+    <circle cx="48" cy="64" r="7" fill="#171717" stroke="#E8EDF2" stroke-width="5"/>
+    <path d="M61 64L72 53L83 64L72 75L61 64Z" fill="#B7791F"/>
+    <path d="M88 59L96 67L109 54" stroke="#168A5B" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M105 80C101 86 94 90 86 90C74 90 64 80 64 68" stroke="#6D5BD0" stroke-width="6" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(238 64)">
+    <text x="0" y="58" fill="#171717" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="56" font-weight="850" letter-spacing="0">Evidence Chain</text>
+    <text x="2" y="99" fill="#5F6B72" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="22" font-weight="650" letter-spacing="0">From raw signal to shipped product decision.</text>
+  </g>
+</svg>

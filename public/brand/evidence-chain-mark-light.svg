@@ -1,0 +1,12 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Evidence Chain mark light</title>
+  <desc id="desc">A compact trace spine mark for light surfaces.</desc>
+  <rect x="1" y="1" width="126" height="126" rx="27" fill="#FFFFFF"/>
+  <rect x="1" y="1" width="126" height="126" rx="27" stroke="#D8DEE3" stroke-width="2"/>
+  <path d="M26 64H102" stroke="#2F3437" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="26" cy="64" r="9" fill="#2563EB"/>
+  <circle cx="48" cy="64" r="7" fill="#FFFFFF" stroke="#2F3437" stroke-width="5"/>
+  <path d="M61 64L72 53L83 64L72 75L61 64Z" fill="#B7791F"/>
+  <path d="M88 59L96 67L109 54" stroke="#168A5B" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M105 80C101 86 94 90 86 90C74 90 64 80 64 68" stroke="#6D5BD0" stroke-width="6" stroke-linecap="round"/>
+</svg>

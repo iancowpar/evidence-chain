@@ -1,0 +1,21 @@
+<svg width="960" height="320" viewBox="0 0 960 320" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Evidence Chain logo option 3: EC Audit Monogram</title>
+  <desc id="desc">An abstract EC monogram made from audit-trace lines paired with the Evidence Chain wordmark and tagline.</desc>
+  <rect width="960" height="320" rx="24" fill="#FFFFFF"/>
+  <rect x="1" y="1" width="958" height="318" rx="23" stroke="#D8DEE3"/>
+  <g transform="translate(82 66)">
+    <path d="M186 38C154 13 106 14 74 42C33 78 33 142 74 178C106 206 154 207 186 182" stroke="#171717" stroke-width="10" stroke-linecap="round"/>
+    <path d="M50 62H152" stroke="#2563EB" stroke-width="10" stroke-linecap="round"/>
+    <path d="M50 112H130" stroke="#6D5BD0" stroke-width="10" stroke-linecap="round"/>
+    <path d="M50 162H152" stroke="#168A5B" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="50" cy="62" r="13" fill="#2563EB"/>
+    <circle cx="152" cy="62" r="10" fill="#FFFFFF" stroke="#2563EB" stroke-width="6"/>
+    <path d="M116 112L130 98L144 112L130 126L116 112Z" fill="#B7791F"/>
+    <path d="M135 154L150 169L174 144" stroke="#168A5B" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <g transform="translate(390 90)">
+    <text x="0" y="62" fill="#171717" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="54" font-weight="800" letter-spacing="0">Evidence Chain</text>
+    <text x="2" y="104" fill="#5F6B72" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="22" font-weight="600" letter-spacing="0">From raw signal to shipped product decision.</text>
+  </g>
+  <text x="72" y="275" fill="#5F6B72" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="15" font-weight="800" letter-spacing="1.8">OPTION 3 · EC AUDIT MONOGRAM</text>
+</svg>

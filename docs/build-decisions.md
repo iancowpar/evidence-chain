@@ -119,6 +119,14 @@ Use it as source material for LinkedIn posts, case study notes, changelogs, and 
 - **Verification:** Brief opens from the Executive Memo, preserves selected signal context, includes the promised sections, and renders as single-column on mobile.
 - **Build-in-public angle:** The product now produces the artifact it promises: a reviewable product decision narrative.
 
+### 2026-05-28: Choose and refine the Trace Spine mark
+
+- **Decision:** Use the Trace Spine concept as the Evidence Chain mark and lockup.
+- **Why:** The mark shares the same grammar as the product: raw signal becomes pattern, decision, shipped change, and learning loop.
+- **Tradeoff:** It is more literal than an abstract monogram, but stronger for a product whose differentiator is inspectable traceability.
+- **Verification:** Final SVG assets were created for horizontal lockup, stacked lockup, dark mark, light mark, and favicon, then integrated into the app shell.
+- **Build-in-public angle:** The logo is not decoration. It is the product thesis compressed into a brand mark.
+
 ## Current Narrative Thread
 
 Evidence Chain is being built as a product decision traceability tool for product leaders. The central thesis is that product teams do not lack feedback; they lack a reliable way to convert feedback into scoped decisions, shipped changes, and visible learning.
@@ -127,7 +135,7 @@ The build process is intentionally recursive: Evidence Chain is being built with
 
 ## Open Decisions
 
-- Choose one of three logo/mark/lockup directions.
+- Decide whether the Trace Spine should be simplified further for tiny social avatars.
 - Decide whether the Decision Brief should become the default shareable route.
 - Decide when to deploy a public demo URL beyond the GitHub repository.
 - Decide the first build-in-public LinkedIn post sequence.

@@ -1,0 +1,21 @@
+<svg width="960" height="320" viewBox="0 0 960 320" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Evidence Chain logo option 2: Decision Bracket</title>
+  <desc id="desc">A bracketed evidence path mark paired with the Evidence Chain wordmark and tagline.</desc>
+  <rect width="960" height="320" rx="24" fill="#FFFFFF"/>
+  <rect x="1" y="1" width="958" height="318" rx="23" stroke="#D8DEE3"/>
+  <g transform="translate(78 76)">
+    <path d="M34 24H12V160H34" stroke="#171717" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M260 24H282V160H260" stroke="#171717" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M60 92H230" stroke="#2563EB" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="62" cy="92" r="13" fill="#2563EB"/>
+    <circle cx="110" cy="92" r="10" fill="#FFFFFF" stroke="#2563EB" stroke-width="5"/>
+    <path d="M145 92L162 75L179 92L162 109L145 92Z" fill="#B7791F"/>
+    <path d="M201 82L218 99L242 75" stroke="#168A5B" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="162" cy="92" r="58" stroke="#D8DEE3" stroke-width="3" stroke-dasharray="8 8"/>
+  </g>
+  <g transform="translate(390 90)">
+    <text x="0" y="62" fill="#171717" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="54" font-weight="800" letter-spacing="0">Evidence Chain</text>
+    <text x="2" y="104" fill="#5F6B72" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="22" font-weight="600" letter-spacing="0">From raw signal to shipped product decision.</text>
+  </g>
+  <text x="72" y="275" fill="#5F6B72" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="15" font-weight="800" letter-spacing="1.8">OPTION 2 · DECISION BRACKET</text>
+</svg>
