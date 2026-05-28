@@ -11,9 +11,11 @@ import {
   Lightbulb,
   PackageCheck,
   Plus,
+  Printer,
   RotateCcw,
   ShieldCheck,
   Sparkles,
+  X,
 } from "lucide-react";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import {
@@ -104,6 +106,7 @@ function App() {
   const decision = decisions.find((item) => item.patternId === pattern.id) as Decision;
   const shipped = shipLog.find((item) => item.decisionId === decision.id) as ShipLogEntry;
   const [selectedSignalId, setSelectedSignalId] = useState(patternSignals[0]?.id ?? "");
+  const [isBriefOpen, setIsBriefOpen] = useState(false);
   const selectedSignal =
     patternSignals.find((signal) => signal.id === selectedSignalId) ?? patternSignals[0];
   const selectedImpact =
@@ -206,8 +209,21 @@ function App() {
             selectedSignal={selectedSignal}
             selectedImpact={selectedImpact}
             signalCount={patternSignals.length}
+            onViewBrief={() => setIsBriefOpen(true)}
           />
         </section>
+
+        {isBriefOpen ? (
+          <DecisionBrief
+            decision={decision}
+            impact={selectedImpact}
+            onClose={() => setIsBriefOpen(false)}
+            pattern={pattern}
+            selectedSignal={selectedSignal}
+            shipped={shipped}
+            signals={patternSignals}
+          />
+        ) : null}
 
         <section id="evidence" className="section-grid">
           <div className="section-header">
@@ -476,12 +492,14 @@ function ExecutiveDecisionMemo({
   selectedSignal,
   selectedImpact,
   signalCount,
+  onViewBrief,
 }: {
   decision: Decision;
   pattern: Pattern;
   selectedSignal?: Signal;
   selectedImpact: DecisionImpact;
   signalCount: number;
+  onViewBrief: () => void;
 }) {
   const tradeoff =
     "Make trust-critical state visible while keeping setup controls out of the daily scan path.";
@@ -528,7 +546,126 @@ function ExecutiveDecisionMemo({
           <dd>{evidenceContribution}</dd>
         </div>
       </dl>
+      <button className="brief-button" type="button" onClick={onViewBrief}>
+        <Printer size={15} aria-hidden="true" />
+        View Decision Brief
+      </button>
     </aside>
+  );
+}
+
+function DecisionBrief({
+  decision,
+  impact,
+  onClose,
+  pattern,
+  selectedSignal,
+  shipped,
+  signals,
+}: {
+  decision: Decision;
+  impact: DecisionImpact;
+  onClose: () => void;
+  pattern: Pattern;
+  selectedSignal?: Signal;
+  shipped: ShipLogEntry;
+  signals: Signal[];
+}) {
+  const keySignals = signals.slice(0, 3);
+
+  return (
+    <section className="decision-brief" aria-label="Decision brief">
+      <div className="brief-header">
+        <div>
+          <span className="eyebrow">Decision Brief</span>
+          <h2>{pattern.title}</h2>
+          <p>{pattern.opportunityStatement}</p>
+        </div>
+        <button className="icon-button" type="button" onClick={onClose} title="Close brief">
+          <X size={18} aria-hidden="true" />
+        </button>
+      </div>
+
+      <div className="brief-summary">
+        <BriefBlock label="Decision" value={decision.decision} />
+        <BriefBlock label="Tradeoff accepted" value={impact.changed} />
+        <BriefBlock label="Primary risk" value={decision.risks} />
+        <BriefBlock label="Success metric" value={decision.successMetric} />
+      </div>
+
+      <div className="brief-body">
+        <article>
+          <span className="eyebrow">Evidence Summary</span>
+          <h3>{signals.length} signals converged on one trust pattern.</h3>
+          <ul>
+            {keySignals.map((signal) => (
+              <li key={signal.id}>
+                <strong>{signal.title}</strong>
+                <span>{signal.type} · {signal.source}</span>
+              </li>
+            ))}
+          </ul>
+        </article>
+
+        <article>
+          <span className="eyebrow">Triad Review</span>
+          <h3>Product, design, and engineering reached the same decision surface.</h3>
+          <dl>
+            <div>
+              <dt>Product</dt>
+              <dd>{pattern.triadReview.productOutcome}</dd>
+            </div>
+            <div>
+              <dt>Design</dt>
+              <dd>{pattern.triadReview.designFriction}</dd>
+            </div>
+            <div>
+              <dt>Engineering</dt>
+              <dd>{pattern.triadReview.stateReliabilityConcern}</dd>
+            </div>
+          </dl>
+        </article>
+
+        <article>
+          <span className="eyebrow">Selected Signal Impact</span>
+          <h3>{selectedSignal?.title ?? "Pattern-level decision"}</h3>
+          <p>{selectedSignal?.quoteOrObservation ?? pattern.description}</p>
+          <dl>
+            <div>
+              <dt>Pressure</dt>
+              <dd>{impact.pressure}</dd>
+            </div>
+            <div>
+              <dt>Risk raised</dt>
+              <dd>{impact.riskRaised}</dd>
+            </div>
+            <div>
+              <dt>Memo influence</dt>
+              <dd>{impact.memoInfluence}</dd>
+            </div>
+          </dl>
+        </article>
+
+        <article>
+          <span className="eyebrow">Shipped Learning</span>
+          <h3>{shipped.shippedChange}</h3>
+          <p>{shipped.learning}</p>
+          <footer>
+            <span>Status: {decision.status}</span>
+            <span>Follow-up: {decision.followUpDate}</span>
+          </footer>
+        </article>
+      </div>
+    </section>
+  );
+}
+
+function BriefBlock({ label, value }: { label: string; value: string }) {
+  return (
+    <article className="brief-block">
+      <span>{label}</span>
+      <strong>{value}</strong>
+    </article>
   );
 }
 
