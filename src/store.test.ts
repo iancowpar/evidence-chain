@@ -33,6 +33,18 @@ describe("evidence store", () => {
     expect(s.signals[0].createdAt).toMatch(/^\d{4}-\d{2}-\d{2}$/);
   });
 
+  it("derives a decision impact for captured signals", () => {
+    store().addSignal({ ...draft, severity: "Low" });
+    expect(store().signals[0].impact.pressure).toBe("Learn more");
+    store().addSignal({ ...draft, severity: "High" });
+    expect(store().signals[0].impact.pressure).toBe("Ship now");
+  });
+
+  it("seeds curated impact copy for demo signals", () => {
+    const seeded = store().signals.find((s) => s.id === "signal-cloud-hidden");
+    expect(seeded?.impact.pressure).toBe("Narrow scope");
+  });
+
   it("updates a decision field and splits optionsConsidered on newlines", () => {
     const id = store().decisions[0].id;
     store().updateDecision(id, "rationale", "Edited rationale");

@@ -31,16 +31,22 @@ export function SignalsSection({
 }) {
   const addSignal = useEvidenceStore((state) => state.addSignal);
   const [draft, setDraft] = useState(emptyDraft);
+  const [error, setError] = useState("");
+
+  const titleMissing = Boolean(error) && !draft.title.trim();
+  const observationMissing = Boolean(error) && !draft.quoteOrObservation.trim();
 
   const submitSignal = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!draft.title.trim() || !draft.quoteOrObservation.trim()) {
+      setError("Add a title and an observation before capturing a signal.");
       return;
     }
 
     addSignal(draft);
     setDraft(emptyDraft);
+    setError("");
   };
 
   return (
@@ -59,7 +65,11 @@ export function SignalsSection({
             Title
             <input
               value={draft.title}
-              onChange={(event) => setDraft({ ...draft, title: event.target.value })}
+              aria-invalid={titleMissing || undefined}
+              onChange={(event) => {
+                setDraft({ ...draft, title: event.target.value });
+                if (error) setError("");
+              }}
               placeholder="Users are unsure whether data synced"
             />
           </label>
@@ -67,9 +77,11 @@ export function SignalsSection({
             Observation
             <textarea
               value={draft.quoteOrObservation}
-              onChange={(event) =>
-                setDraft({ ...draft, quoteOrObservation: event.target.value })
-              }
+              aria-invalid={observationMissing || undefined}
+              onChange={(event) => {
+                setDraft({ ...draft, quoteOrObservation: event.target.value });
+                if (error) setError("");
+              }}
               placeholder="Paste a quote, support note, metric observation, or UX finding."
             />
           </label>
@@ -122,6 +134,11 @@ export function SignalsSection({
               />
             </label>
           </div>
+          {error ? (
+            <p className="form-error" role="alert">
+              {error}
+            </p>
+          ) : null}
           <button className="primary-button" type="submit">
             Add to Evidence Chain
             <ArrowRight size={16} aria-hidden="true" />

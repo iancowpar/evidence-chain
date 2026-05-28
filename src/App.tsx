@@ -27,6 +27,7 @@ function App() {
 
   const [selectedSignalId, setSelectedSignalId] = useState(patternSignals[0]?.id ?? "");
   const [isBriefOpen, setIsBriefOpen] = useState(false);
+  const [confirmingReset, setConfirmingReset] = useState(false);
 
   const selectedSignal =
     patternSignals.find((signal) => signal.id === selectedSignalId) ?? patternSignals[0];
@@ -69,14 +70,38 @@ function App() {
             <span className="eyebrow">Director-Readable MVP</span>
             <h1>Trace every product decision back to evidence.</h1>
           </div>
-          <button
-            className="icon-button"
-            type="button"
-            onClick={resetDemo}
-            title="Reset demo data"
-          >
-            <RotateCcw size={18} aria-hidden="true" />
-          </button>
+          {confirmingReset ? (
+            <div className="reset-confirm" role="group" aria-label="Confirm reset">
+              <span>Reset all data?</span>
+              <button
+                className="reset-confirm-yes"
+                type="button"
+                onClick={() => {
+                  resetDemo();
+                  setSelectedSignalId("");
+                  setConfirmingReset(false);
+                }}
+              >
+                Reset
+              </button>
+              <button
+                className="reset-confirm-no"
+                type="button"
+                onClick={() => setConfirmingReset(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          ) : (
+            <button
+              className="icon-button"
+              type="button"
+              onClick={() => setConfirmingReset(true)}
+              title="Reset demo data"
+            >
+              <RotateCcw size={18} aria-hidden="true" />
+            </button>
+          )}
         </header>
 
         <section className="hero-strip" aria-label="Current pattern">

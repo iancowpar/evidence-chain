@@ -364,7 +364,8 @@ a {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 320px;
   gap: 14px;
-  align-items: stretch;
+  /* start, not stretch: a tall side panel must not drag the chain's height. */
+  align-items: start;
 }
 
 .chain {
@@ -489,6 +490,29 @@ a {
   font-size: 13px;
 }
 
+/* Clamp node text so one long signal can't balloon a single grid column
+   and leave the other five nodes short next to it. */
+.chain-node h3 {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.chain-node p {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 8;
+}
+
+.signal-card p {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+}
+
 .selected-evidence {
   display: grid;
   align-content: start;
@@ -515,12 +539,16 @@ a {
 }
 
 .selected-evidence blockquote {
+  display: -webkit-box;
+  overflow: hidden;
   margin: 0;
   border-left: 3px solid var(--blue);
   padding-left: 12px;
   color: var(--charcoal);
   font-size: 14px;
   line-height: 1.55;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 10;
 }
 
 .selected-evidence dl {
@@ -595,6 +623,23 @@ select:focus {
   box-shadow: 0 0 0 3px rgba(39, 100, 230, 0.13);
 }
 
+input[aria-invalid="true"],
+textarea[aria-invalid="true"] {
+  border-color: var(--red);
+}
+
+input[aria-invalid="true"]:focus,
+textarea[aria-invalid="true"]:focus {
+  box-shadow: 0 0 0 3px rgba(194, 65, 59, 0.16);
+}
+
+.form-error {
+  margin: 0;
+  color: var(--red);
+  font-size: 13px;
+  font-weight: 700;
+}
+
 textarea {
   min-height: 104px;
   resize: vertical;
@@ -639,14 +684,37 @@ textarea {
   color: var(--blue);
 }
 
+.brief-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: start center;
+  padding: clamp(16px, 5vh, 64px) 16px;
+  overflow: auto;
+  background: rgba(23, 23, 23, 0.45);
+  backdrop-filter: blur(2px);
+  animation: brief-fade 140ms ease;
+}
+
+@keyframes brief-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .decision-brief {
   display: grid;
   gap: 18px;
+  width: min(960px, 100%);
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 22px;
   background: #ffffff;
-  box-shadow: var(--shadow);
+  box-shadow: 0 30px 80px rgba(23, 23, 23, 0.28);
 }
 
 .brief-header {
@@ -1100,4 +1168,37 @@ textarea {
 .recovery-card .primary-button {
   align-self: flex-start;
   margin-top: 4px;
+}
+
+.reset-confirm {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 6px 10px;
+  background: var(--panel-strong);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.reset-confirm button {
+  width: auto;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.reset-confirm-yes {
+  border: 0;
+  background: var(--red);
+  color: #ffffff;
+}
+
+.reset-confirm-no {
+  border: 1px solid var(--line);
+  background: #ffffff;
+  color: var(--ink);
 }

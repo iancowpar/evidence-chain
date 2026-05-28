@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { deriveImpact, impactForId, type DecisionImpact } from "./lib/decisionImpacts";
 
 export type SignalType =
   | "Customer pain"
@@ -19,6 +20,9 @@ export type Signal = {
   severity: "Low" | "Medium" | "High";
   createdAt: string;
   linkedPatternId: string;
+  // How this signal pressured the decision. Curated for seeded signals,
+  // derived from type/severity for captured ones. See lib/decisionImpacts.
+  impact: DecisionImpact;
 };
 
 export type TriadReview = {
@@ -62,7 +66,7 @@ export type ShipLogEntry = {
   learning: string;
 };
 
-type DraftSignal = Omit<Signal, "id" | "createdAt" | "linkedPatternId">;
+type DraftSignal = Omit<Signal, "id" | "createdAt" | "linkedPatternId" | "impact">;
 
 type EvidenceStore = {
   signals: Signal[];
@@ -80,7 +84,7 @@ const demoPatternId = "pattern-sync-trust";
 const demoDecisionId = "decision-sync-trust";
 const demoShipId = "ship-sync-trust";
 
-const demoSignals: Signal[] = [
+const demoSignalSeeds: Omit<Signal, "impact">[] = [
   {
     id: "signal-file-localhost",
     title: "Data appears missing across origins",
@@ -118,6 +122,11 @@ const demoSignals: Signal[] = [
     linkedPatternId: demoPatternId,
   },
 ];
+
+const demoSignals: Signal[] = demoSignalSeeds.map((seed) => ({
+  ...seed,
+  impact: impactForId(seed),
+}));
 
 const demoPattern: Pattern = {
   id: demoPatternId,
@@ -199,6 +208,7 @@ export const useEvidenceStore = create<EvidenceStore>()(
             id: createId(),
             createdAt: new Date().toISOString().slice(0, 10),
             linkedPatternId: state.selectedPatternId,
+            impact: deriveImpact(signal),
           };
 
           return {
@@ -237,7 +247,7 @@ export const useEvidenceStore = create<EvidenceStore>()(
     }),
     {
       name: "evidence-chain-demo",
-      version: 1,
+      version: 2,
       // Runs whenever the persisted version is older than the current one.
       // Pre-versioning storage is treated as version 0, so this also guards
       // against corrupt or incompatible state written before we added a
@@ -254,7 +264,12 @@ export const useEvidenceStore = create<EvidenceStore>()(
         ) {
           return initialState;
         }
-        return state;
+        // v2 added `impact` to every Signal. Back-fill it for signals saved
+        // before the field existed so the UI never reads `undefined`.
+        const signals = state.signals.map((signal) =>
+          signal.impact ? signal : { ...signal, impact: impactForId(signal) },
+        );
+        return { ...state, signals };
       },
     },
   ),

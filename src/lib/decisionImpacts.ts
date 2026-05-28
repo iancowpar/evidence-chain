@@ -7,7 +7,9 @@ export type DecisionImpact = {
   memoInfluence: string;
 };
 
-const decisionImpacts: Record<string, DecisionImpact> = {
+// Curated impact copy for the seeded demo signals. Used both to seed the
+// store and to re-attach the right copy when migrating older persisted state.
+export const SEEDED_IMPACTS: Record<string, DecisionImpact> = {
   "signal-file-localhost": {
     changed: "Moved source visibility into the core trust surface.",
     pressure: "Ship now",
@@ -32,18 +34,34 @@ const decisionImpacts: Record<string, DecisionImpact> = {
   },
 };
 
-const fallbackDecisionImpact = (signal?: Signal): DecisionImpact => ({
-  changed: signal
-    ? `Adds ${signal.type.toLowerCase()} evidence to the active pattern.`
-    : "Summarizes the pattern-level evidence behind the decision.",
-  pressure: signal?.severity === "Low" ? "Learn more" : "Ship now",
-  riskRaised: signal
-    ? "Requires triad review before changing scope."
-    : "Pattern may need more evidence before scaling beyond the MVP.",
-  memoInfluence: signal
-    ? "Supports the evidence contribution field."
-    : "Supports the pattern-level decision memo.",
-});
+// Impact shown when no signal is selected — summarizes the pattern as a whole.
+export const PATTERN_FALLBACK: DecisionImpact = {
+  changed: "Summarizes the pattern-level evidence behind the decision.",
+  pressure: "Ship now",
+  riskRaised: "Pattern may need more evidence before scaling beyond the MVP.",
+  memoInfluence: "Supports the pattern-level decision memo.",
+};
 
-export const impactFor = (signal?: Signal): DecisionImpact =>
-  decisionImpacts[signal?.id ?? ""] ?? fallbackDecisionImpact(signal);
+// Derive an impact for a captured signal from its type and severity. Every
+// signal carries its own impact in the store; this is how new ones get one.
+export function deriveImpact(input: Pick<Signal, "type" | "severity">): DecisionImpact {
+  return {
+    changed: `Adds ${input.type.toLowerCase()} evidence to the active pattern.`,
+    pressure: input.severity === "Low" ? "Learn more" : "Ship now",
+    riskRaised: "Requires triad review before changing scope.",
+    memoInfluence: "Supports the evidence contribution field.",
+  };
+}
+
+// Resolve the impact to store on a signal by id: curated copy for seeded
+// signals, derived copy for everything else.
+export function impactForId(
+  input: Pick<Signal, "id" | "type" | "severity">,
+): DecisionImpact {
+  return SEEDED_IMPACTS[input.id] ?? deriveImpact(input);
+}
+
+// Read the impact for the currently selected signal (or the pattern fallback).
+export function impactFor(signal?: Signal): DecisionImpact {
+  return signal?.impact ?? PATTERN_FALLBACK;
+}
