@@ -5,6 +5,7 @@ import {
   Layers3,
   PackageCheck,
 } from "lucide-react";
+import { TraceMark } from "./TraceMark";
 
 const navItems = [
   { label: "Evidence", icon: GitBranch },
@@ -19,7 +20,7 @@ export function Sidebar() {
     <aside className="sidebar" aria-label="Evidence Chain navigation">
       <div className="brand-lockup">
         <span className="brand-mark">
-          <GitBranch size={20} aria-hidden="true" />
+          <TraceMark size={22} title="Evidence Chain" />
         </span>
         <div>
           <strong>Evidence Chain</strong>
