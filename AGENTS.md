@@ -11,8 +11,8 @@ raw signal to shipped change. Single-page, no backend, no auth. State is
 held in Zustand and persisted to `localStorage` under the key
 `evidence-chain-demo`.
 
-Positioning: *a backlog captures work; Evidence Chain captures why the work
-matters.*
+Positioning: _a backlog captures work; Evidence Chain captures why the work
+matters._
 
 ## Tech
 
@@ -27,24 +27,35 @@ matters.*
 bin/setup          # npm ci — first time, or after pulling dependency changes
 npm run dev        # vite on 0.0.0.0:5173
 npm run build      # tsc -b && vite build (production build)
-npm run typecheck  # tsc --noEmit — fastest check before committing
+npm run typecheck  # tsc --noEmit — fastest type check
+npm test           # vitest run — unit + component tests
+npm run lint       # eslint
+npm run format     # prettier --write . (format:check to verify only)
 ```
 
-There are no tests and no linter yet. `typecheck` + a manual browser pass
-is the verification bar.
+Before committing, the bar is: `npm run typecheck && npm run lint && npm test`
+green, plus `npm run format:check`. Tests live next to the code they cover
+(`*.test.ts` / `*.test.tsx`); the shared setup is `src/test/setup.ts`, which
+resets the store and localStorage between tests.
 
 ## File layout
 
 ```
 src/
-  main.tsx                          entry
+  main.tsx                          entry (wraps App in ErrorBoundary)
   App.tsx                           top-level layout + state wiring
   store.ts                          Zustand store, types, seeded demo data
+  store.test.ts                     store-logic tests
+  App.test.tsx                      component behavior tests
   styles.css                        all styling
+  test/
+    setup.ts                        vitest setup: resets store + localStorage
   lib/
     decisionImpacts.ts              per-signal impact mapping (UI-only)
   components/
     Sidebar.tsx
+    TraceMark.tsx                   brand mark (the "Trace" lockup)
+    ErrorBoundary.tsx               render-crash recovery screen
     ExecutiveMemo.tsx
     DecisionBrief.tsx
     EvidenceChainSection.tsx        chain trace + SelectedEvidence panel
@@ -89,8 +100,8 @@ switcher and the type assertions assume one exists).
 
 - `src/store.ts` — domain model changes ripple everywhere. If you change
   the shape of `Signal`, `Pattern`, `Decision`, or `ShipLogEntry`, bump
-  the persist `version` (when it exists) and write a `migrate`. Otherwise
-  hydration will silently break for anyone with existing localStorage.
+  the persist `version` and extend `migrate`. Otherwise hydration will
+  silently break for anyone with existing localStorage.
 - `src/styles.css` — long single file. Prefer appending to a section
   rather than reorganizing.
 - `src/App.tsx` — the orchestration root. Most feature work should land
@@ -99,9 +110,7 @@ switcher and the type assertions assume one exists).
 
 ## Things this repo intentionally does NOT have (yet)
 
-- Tests
-- A linter
 - A backend or auth
 - A pattern switcher / multi-pattern UI
-- A persist `version` / migration in Zustand
+- CI (tests + lint exist locally but aren't wired to a pipeline)
 - AI clustering or prioritization
