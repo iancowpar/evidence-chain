@@ -65,6 +65,16 @@ function App() {
   const [selectedSignalId, setSelectedSignalId] = useState(patternSignals[0]?.id ?? "");
   const selectedSignal =
     patternSignals.find((signal) => signal.id === selectedSignalId) ?? patternSignals[0];
+  const selectedTraceLabels = {
+    signal: selectedSignal?.source ?? "Signal input",
+    pattern: `${patternSignals.length} related inputs`,
+    triad: selectedSignal
+      ? `${selectedSignal.severity} ${selectedSignal.type}`
+      : `Confidence ${pattern.triadReview.confidence}`,
+    decision: "Scoped trust state",
+    shipped: "Source chip added",
+    learning: "Trust gap reduced",
+  };
 
   const [draft, setDraft] = useState({
     title: "",
@@ -174,6 +184,7 @@ function App() {
               isActive={Boolean(selectedSignal)}
               icon={<CircleDot size={18} />}
               label="Raw Signals"
+              proofLabel={selectedTraceLabels.signal}
               title={selectedSignal?.title ?? `${patternSignals.length} inputs`}
               body={
                 selectedSignal
@@ -186,6 +197,7 @@ function App() {
               isActive={Boolean(selectedSignal)}
               icon={<Sparkles size={18} />}
               label="Pattern"
+              proofLabel={selectedTraceLabels.pattern}
               title={pattern.title}
               body={pattern.opportunityStatement}
             />
@@ -194,6 +206,7 @@ function App() {
               isActive={Boolean(selectedSignal)}
               icon={<Layers3 size={18} />}
               label="Triad Review"
+              proofLabel={selectedTraceLabels.triad}
               title="Outcome, clarity, and reliability converge"
               body={`${pattern.triadReview.productOutcome} ${pattern.triadReview.stateReliabilityConcern}`}
             />
@@ -202,6 +215,7 @@ function App() {
               isActive={Boolean(selectedSignal)}
               icon={<Lightbulb size={18} />}
               label="Decision"
+              proofLabel={selectedTraceLabels.decision}
               title={decision.decision}
               body={decision.rationale}
             />
@@ -210,6 +224,7 @@ function App() {
               isActive={Boolean(selectedSignal)}
               icon={<PackageCheck size={18} />}
               label="Shipped Change"
+              proofLabel={selectedTraceLabels.shipped}
               title={shipped.shippedChange}
               body={shipped.result}
             />
@@ -218,6 +233,7 @@ function App() {
               isActive={Boolean(selectedSignal)}
               icon={<RotateCcw size={18} />}
               label="Learning"
+              proofLabel={selectedTraceLabels.learning}
               title="The loop creates reusable product judgment"
               body={shipped.learning}
             />
@@ -383,6 +399,7 @@ function ChainNode({
   isActive,
   icon,
   label,
+  proofLabel,
   title,
   body,
 }: {
@@ -390,12 +407,16 @@ function ChainNode({
   isActive: boolean;
   icon: React.ReactNode;
   label: string;
+  proofLabel: string;
   title: string;
   body: string;
 }) {
   return (
     <article className={`chain-node ${stage} ${isActive ? "is-active" : ""}`}>
-      <div className="chain-icon">{icon}</div>
+      <div className="trace-head">
+        <div className="chain-icon">{icon}</div>
+        <span className="proof-label">{proofLabel}</span>
+      </div>
       <div>
         <span className="eyebrow">{label}</span>
         <h3>{title}</h3>
