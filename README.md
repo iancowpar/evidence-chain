@@ -52,6 +52,8 @@ Positioning:
 
 > A backlog captures work. Evidence Chain captures why the work matters.
 
+Build decisions are tracked in [docs/build-decisions.md](docs/build-decisions.md).
+
 ## Local Development
 
 ```bash
