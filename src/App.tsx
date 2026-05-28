@@ -15,7 +15,7 @@ import {
   ShieldCheck,
   Sparkles,
 } from "lucide-react";
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import {
   Decision,
   Pattern,
@@ -62,6 +62,9 @@ function App() {
   );
   const decision = decisions.find((item) => item.patternId === pattern.id) as Decision;
   const shipped = shipLog.find((item) => item.decisionId === decision.id) as ShipLogEntry;
+  const [selectedSignalId, setSelectedSignalId] = useState(patternSignals[0]?.id ?? "");
+  const selectedSignal =
+    patternSignals.find((signal) => signal.id === selectedSignalId) ?? patternSignals[0];
 
   const [draft, setDraft] = useState({
     title: "",
@@ -89,6 +92,12 @@ function App() {
       severity: "Medium",
     });
   };
+
+  useEffect(() => {
+    if (!selectedSignalId && patternSignals[0]) {
+      setSelectedSignalId(patternSignals[0].id);
+    }
+  }, [patternSignals, selectedSignalId]);
 
   return (
     <main className="app-shell">
@@ -170,16 +179,23 @@ function App() {
             </p>
           </div>
 
-          <div className="chain">
+          <div className="trace-workbench">
+            <div className="chain" aria-label="Selected signal trace">
             <ChainNode
               stage="signal"
+              isActive={Boolean(selectedSignal)}
               icon={<CircleDot size={18} />}
               label="Raw Signals"
-              title={`${patternSignals.length} inputs with shared trust risk`}
-              body={patternSignals.map((signal) => signal.title).join(" · ")}
+              title={selectedSignal?.title ?? `${patternSignals.length} inputs`}
+              body={
+                selectedSignal
+                  ? selectedSignal.quoteOrObservation
+                  : patternSignals.map((signal) => signal.title).join(" · ")
+              }
             />
             <ChainNode
               stage="pattern"
+              isActive={Boolean(selectedSignal)}
               icon={<Sparkles size={18} />}
               label="Pattern"
               title={pattern.title}
@@ -187,6 +203,7 @@ function App() {
             />
             <ChainNode
               stage="triad"
+              isActive={Boolean(selectedSignal)}
               icon={<Layers3 size={18} />}
               label="Triad Review"
               title="Outcome, clarity, and reliability converge"
@@ -194,6 +211,7 @@ function App() {
             />
             <ChainNode
               stage="decision"
+              isActive={Boolean(selectedSignal)}
               icon={<Lightbulb size={18} />}
               label="Decision"
               title={decision.decision}
@@ -201,6 +219,7 @@ function App() {
             />
             <ChainNode
               stage="shipped"
+              isActive={Boolean(selectedSignal)}
               icon={<PackageCheck size={18} />}
               label="Shipped Change"
               title={shipped.shippedChange}
@@ -208,10 +227,18 @@ function App() {
             />
             <ChainNode
               stage="learning"
+              isActive={Boolean(selectedSignal)}
               icon={<RotateCcw size={18} />}
               label="Learning"
               title="The loop creates reusable product judgment"
               body={shipped.learning}
+            />
+            </div>
+
+            <SelectedEvidence
+              signal={selectedSignal}
+              decision={decision}
+              pattern={pattern}
             />
           </div>
         </section>
@@ -308,7 +335,13 @@ function App() {
             </div>
             <div className="signal-list">
               {patternSignals.map((signal) => (
-                <SignalCard key={signal.id} signal={signal} />
+                <SignalCard
+                  key={signal.id}
+                  signal={signal}
+                  isSelected={signal.id === selectedSignal?.id}
+                  isDimmed={Boolean(selectedSignal) && signal.id !== selectedSignal.id}
+                  onSelect={() => setSelectedSignalId(signal.id)}
+                />
               ))}
             </div>
           </div>
@@ -357,30 +390,23 @@ function App() {
   );
 }
 
-function Metric({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="metric">
-      <span>{label}</span>
-      <strong>{value}</strong>
-    </div>
-  );
-}
-
 function ChainNode({
   stage,
+  isActive,
   icon,
   label,
   title,
   body,
 }: {
   stage: "signal" | "pattern" | "triad" | "decision" | "shipped" | "learning";
+  isActive: boolean;
   icon: React.ReactNode;
   label: string;
   title: string;
   body: string;
 }) {
   return (
-    <article className={`chain-node ${stage}`}>
+    <article className={`chain-node ${stage} ${isActive ? "is-active" : ""}`}>
       <div className="chain-icon">{icon}</div>
       <div>
         <span className="eyebrow">{label}</span>
@@ -391,9 +417,76 @@ function ChainNode({
   );
 }
 
-function SignalCard({ signal }: { signal: Signal }) {
+function SelectedEvidence({
+  signal,
+  decision,
+  pattern,
+}: {
+  signal?: Signal;
+  decision: Decision;
+  pattern: Pattern;
+}) {
+  if (!signal) {
+    return (
+      <aside className="selected-evidence" aria-label="Selected evidence">
+        <span className="eyebrow">Selected Evidence</span>
+        <h3>Select a signal to inspect its decision trail.</h3>
+      </aside>
+    );
+  }
+
   return (
-    <article className="signal-card">
+    <aside className="selected-evidence" aria-label="Selected evidence">
+      <div className="selected-heading">
+        <span className="eyebrow">Selected Evidence</span>
+        <span className={`status-chip ${signal.severity.toLowerCase()}`}>
+          {signal.severity}
+        </span>
+      </div>
+      <h3>{signal.title}</h3>
+      <blockquote>{signal.quoteOrObservation}</blockquote>
+      <dl>
+        <div>
+          <dt>Source</dt>
+          <dd>{signal.source}</dd>
+        </div>
+        <div>
+          <dt>Segment</dt>
+          <dd>{signal.userSegment}</dd>
+        </div>
+        <div>
+          <dt>Pattern</dt>
+          <dd>{pattern.priority} · {pattern.title}</dd>
+        </div>
+        <div>
+          <dt>Linked rationale</dt>
+          <dd>{decision.rationale}</dd>
+        </div>
+      </dl>
+    </aside>
+  );
+}
+
+function SignalCard({
+  signal,
+  isSelected,
+  isDimmed,
+  onSelect,
+}: {
+  signal: Signal;
+  isSelected: boolean;
+  isDimmed: boolean;
+  onSelect: () => void;
+}) {
+  return (
+    <button
+      className={`signal-card ${isSelected ? "is-selected" : ""} ${
+        isDimmed ? "is-dimmed" : ""
+      }`}
+      type="button"
+      onClick={onSelect}
+      aria-pressed={isSelected}
+    >
       <div className="card-row">
         <span className={`status-chip ${signal.severity.toLowerCase()}`}>{signal.severity}</span>
         <span>{signal.type}</span>
@@ -404,7 +497,7 @@ function SignalCard({ signal }: { signal: Signal }) {
         <span>{signal.source}</span>
         <span>{signal.userSegment}</span>
       </footer>
-    </article>
+    </button>
   );
 }
 
