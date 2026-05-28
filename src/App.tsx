@@ -42,6 +42,47 @@ const navItems = [
   { label: "Ship Log", icon: PackageCheck },
 ];
 
+type DecisionImpact = {
+  changed: string;
+  pressure: "Ship now" | "Learn more" | "Defer" | "Narrow scope";
+  riskRaised: string;
+  memoInfluence: string;
+};
+
+const decisionImpacts: Record<string, DecisionImpact> = {
+  "signal-file-localhost": {
+    changed: "Moved source visibility into the core trust surface.",
+    pressure: "Ship now",
+    riskRaised: "Users may perceive intact local data as lost when the app origin changes.",
+    memoInfluence: "Supports the primary risk and success metric.",
+  },
+  "signal-cloud-hidden": {
+    changed: "Kept sync controls secondary while adding lightweight state reassurance.",
+    pressure: "Narrow scope",
+    riskRaised: "Putting sync configuration back in the hero could make daily logging feel technical.",
+    memoInfluence: "Supports the tradeoff between trust cues and daily focus.",
+  },
+  "signal-pin-recovery": {
+    changed: "Expanded recovery copy and auth-state clarity without creating a new recovery flow.",
+    pressure: "Ship now",
+    riskRaised: "Blocked recovery can break the daily habit and damage confidence in saved data.",
+    memoInfluence: "Supports the rationale for visible state and recovery affordances.",
+  },
+};
+
+const fallbackDecisionImpact = (signal?: Signal): DecisionImpact => ({
+  changed: signal
+    ? `Adds ${signal.type.toLowerCase()} evidence to the active pattern.`
+    : "Summarizes the pattern-level evidence behind the decision.",
+  pressure: signal?.severity === "Low" ? "Learn more" : "Ship now",
+  riskRaised: signal
+    ? "Requires triad review before changing scope."
+    : "Pattern may need more evidence before scaling beyond the MVP.",
+  memoInfluence: signal
+    ? "Supports the evidence contribution field."
+    : "Supports the pattern-level decision memo.",
+});
+
 function App() {
   const {
     signals,
@@ -65,13 +106,15 @@ function App() {
   const [selectedSignalId, setSelectedSignalId] = useState(patternSignals[0]?.id ?? "");
   const selectedSignal =
     patternSignals.find((signal) => signal.id === selectedSignalId) ?? patternSignals[0];
+  const selectedImpact =
+    decisionImpacts[selectedSignal?.id ?? ""] ?? fallbackDecisionImpact(selectedSignal);
   const selectedTraceLabels = {
     signal: selectedSignal?.source ?? "Signal input",
     pattern: `${patternSignals.length} related inputs`,
     triad: selectedSignal
       ? `${selectedSignal.severity} ${selectedSignal.type}`
       : `Confidence ${pattern.triadReview.confidence}`,
-    decision: "Scoped trust state",
+    decision: selectedImpact.pressure,
     shipped: "Source chip added",
     learning: "Trust gap reduced",
   };
@@ -161,6 +204,7 @@ function App() {
             decision={decision}
             pattern={pattern}
             selectedSignal={selectedSignal}
+            selectedImpact={selectedImpact}
             signalCount={patternSignals.length}
           />
         </section>
@@ -241,7 +285,7 @@ function App() {
 
             <SelectedEvidence
               signal={selectedSignal}
-              decision={decision}
+              impact={selectedImpact}
               pattern={pattern}
             />
           </div>
@@ -430,17 +474,19 @@ function ExecutiveDecisionMemo({
   decision,
   pattern,
   selectedSignal,
+  selectedImpact,
   signalCount,
 }: {
   decision: Decision;
   pattern: Pattern;
   selectedSignal?: Signal;
+  selectedImpact: DecisionImpact;
   signalCount: number;
 }) {
   const tradeoff =
     "Make trust-critical state visible while keeping setup controls out of the daily scan path.";
   const evidenceContribution = selectedSignal
-    ? `${selectedSignal.type} from ${selectedSignal.source}: ${selectedSignal.title}`
+    ? `${selectedImpact.memoInfluence} ${selectedImpact.pressure} pressure.`
     : `${signalCount} related signals support this pattern-level decision.`;
 
   return (
@@ -488,11 +534,11 @@ function ExecutiveDecisionMemo({
 
 function SelectedEvidence({
   signal,
-  decision,
+  impact,
   pattern,
 }: {
   signal?: Signal;
-  decision: Decision;
+  impact: DecisionImpact;
   pattern: Pattern;
 }) {
   if (!signal) {
@@ -527,9 +573,21 @@ function SelectedEvidence({
           <dt>Pattern</dt>
           <dd>{pattern.priority} · {pattern.title}</dd>
         </div>
+        <div className="impact-row">
+          <dt>Decision impact</dt>
+          <dd>{impact.changed}</dd>
+        </div>
         <div>
-          <dt>Linked rationale</dt>
-          <dd>{decision.rationale}</dd>
+          <dt>Decision pressure</dt>
+          <dd>{impact.pressure}</dd>
+        </div>
+        <div>
+          <dt>Risk raised</dt>
+          <dd>{impact.riskRaised}</dd>
+        </div>
+        <div>
+          <dt>Memo influence</dt>
+          <dd>{impact.memoInfluence}</dd>
         </div>
       </dl>
     </aside>
