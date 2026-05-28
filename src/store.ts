@@ -238,6 +238,25 @@ export const useEvidenceStore = create<EvidenceStore>()(
     }),
     {
       name: "evidence-chain-demo",
+      version: 1,
+      // Runs whenever the persisted version is older than the current one.
+      // Pre-versioning storage is treated as version 0, so this also guards
+      // against corrupt or incompatible state written before we added a
+      // version. Bump `version` and extend this when a type shape changes.
+      migrate: (persisted) => {
+        const state = persisted as Partial<EvidenceStore> | undefined;
+        if (
+          !state ||
+          !Array.isArray(state.signals) ||
+          !Array.isArray(state.patterns) ||
+          !Array.isArray(state.decisions) ||
+          !Array.isArray(state.shipLog) ||
+          !state.selectedPatternId
+        ) {
+          return initialState;
+        }
+        return state;
+      },
     },
   ),
 );

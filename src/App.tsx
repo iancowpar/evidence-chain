@@ -1,6 +1,6 @@
 import { RotateCcw } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { Decision, Pattern, ShipLogEntry, useEvidenceStore } from "./store";
+import { useEvidenceStore } from "./store";
 import { impactFor } from "./lib/decisionImpacts";
 import { Sidebar } from "./components/Sidebar";
 import { ExecutiveMemo } from "./components/ExecutiveMemo";
@@ -20,13 +20,16 @@ function App() {
     resetDemo,
   } = useEvidenceStore();
 
-  const pattern = patterns.find((item) => item.id === selectedPatternId) as Pattern;
+  const pattern = patterns.find((item) => item.id === selectedPatternId);
   const patternSignals = useMemo(
-    () => signals.filter((signal) => pattern.linkedSignalIds.includes(signal.id)),
-    [signals, pattern.linkedSignalIds],
+    () =>
+      pattern
+        ? signals.filter((signal) => pattern.linkedSignalIds.includes(signal.id))
+        : [],
+    [signals, pattern],
   );
-  const decision = decisions.find((item) => item.patternId === pattern.id) as Decision;
-  const shipped = shipLog.find((item) => item.decisionId === decision.id) as ShipLogEntry;
+  const decision = decisions.find((item) => item.patternId === pattern?.id);
+  const shipped = shipLog.find((item) => item.decisionId === decision?.id);
 
   const [selectedSignalId, setSelectedSignalId] = useState(patternSignals[0]?.id ?? "");
   const [isBriefOpen, setIsBriefOpen] = useState(false);
@@ -40,6 +43,27 @@ function App() {
       setSelectedSignalId(patternSignals[0].id);
     }
   }, [patternSignals, selectedSignalId]);
+
+  // The MVP always has a seeded pattern/decision/ship log. If any is missing,
+  // persisted state is corrupt or incomplete — recover instead of crashing on
+  // a missing field.
+  if (!pattern || !decision || !shipped) {
+    return (
+      <main className="recovery-screen" role="alert">
+        <div className="recovery-card">
+          <span className="eyebrow">No active pattern</span>
+          <h1>The evidence chain is empty.</h1>
+          <p>
+            Saved data is missing a pattern, decision, or ship log entry.
+            Resetting restores the seeded demo.
+          </p>
+          <button className="primary-button" type="button" onClick={resetDemo}>
+            Reset to demo data
+          </button>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="app-shell">
