@@ -35,8 +35,8 @@ export class ErrorBoundary extends Component<Props, State> {
             <span className="eyebrow">Something broke</span>
             <h1>The workspace hit an error.</h1>
             <p>
-              This usually means saved data is out of date or incomplete.
-              Resetting restores the seeded demo and clears the bad state.
+              This usually means saved data is out of date or incomplete. Resetting
+              restores the seeded demo and clears the bad state.
             </p>
             <pre>{this.state.error.message}</pre>
             <button className="primary-button" type="button" onClick={this.handleReset}>

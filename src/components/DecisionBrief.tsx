@@ -29,7 +29,12 @@ export function DecisionBrief({
           <h2>{pattern.title}</h2>
           <p>{pattern.opportunityStatement}</p>
         </div>
-        <button className="icon-button" type="button" onClick={onClose} title="Close brief">
+        <button
+          className="icon-button"
+          type="button"
+          onClick={onClose}
+          title="Close brief"
+        >
           <X size={18} aria-hidden="true" />
         </button>
       </div>
@@ -49,7 +54,9 @@ export function DecisionBrief({
             {keySignals.map((signal) => (
               <li key={signal.id}>
                 <strong>{signal.title}</strong>
-                <span>{signal.type} · {signal.source}</span>
+                <span>
+                  {signal.type} · {signal.source}
+                </span>
               </li>
             ))}
           </ul>

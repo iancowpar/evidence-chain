@@ -44,8 +44,7 @@ export function EvidenceChainSection({
           <h2>Evidence Chain</h2>
         </div>
         <p>
-          The MVP starts here: one visible path from messy signal to shipped
-          learning.
+          The MVP starts here: one visible path from messy signal to shipped learning.
         </p>
       </div>
 
@@ -192,7 +191,9 @@ function SelectedEvidence({
         </div>
         <div>
           <dt>Pattern</dt>
-          <dd>{pattern.priority} · {pattern.title}</dd>
+          <dd>
+            {pattern.priority} · {pattern.title}
+          </dd>
         </div>
         <div className="impact-row">
           <dt>Decision impact</dt>

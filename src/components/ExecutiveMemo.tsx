@@ -27,7 +27,9 @@ export function ExecutiveMemo({
     <aside className="executive-memo" aria-label="Executive decision memo">
       <div className="memo-title-row">
         <span className="eyebrow">Executive Decision Memo</span>
-        <span className={`confidence-chip ${pattern.triadReview.confidence.toLowerCase()}`}>
+        <span
+          className={`confidence-chip ${pattern.triadReview.confidence.toLowerCase()}`}
+        >
           {pattern.triadReview.confidence} confidence
         </span>
       </div>

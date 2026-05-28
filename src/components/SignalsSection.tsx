@@ -92,7 +92,10 @@ export function SignalsSection({
               <select
                 value={draft.severity}
                 onChange={(event) =>
-                  setDraft({ ...draft, severity: event.target.value as Signal["severity"] })
+                  setDraft({
+                    ...draft,
+                    severity: event.target.value as Signal["severity"],
+                  })
                 }
               >
                 <option>Low</option>
@@ -171,7 +174,9 @@ function SignalCard({
       aria-pressed={isSelected}
     >
       <div className="card-row">
-        <span className={`status-chip ${signal.severity.toLowerCase()}`}>{signal.severity}</span>
+        <span className={`status-chip ${signal.severity.toLowerCase()}`}>
+          {signal.severity}
+        </span>
         <span>{signal.type}</span>
       </div>
       <h3>{signal.title}</h3>

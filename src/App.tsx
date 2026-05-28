@@ -11,14 +11,8 @@ import { TriadSection } from "./components/TriadSection";
 import { DecisionSection } from "./components/DecisionSection";
 
 function App() {
-  const {
-    signals,
-    patterns,
-    decisions,
-    shipLog,
-    selectedPatternId,
-    resetDemo,
-  } = useEvidenceStore();
+  const { signals, patterns, decisions, shipLog, selectedPatternId, resetDemo } =
+    useEvidenceStore();
 
   const pattern = patterns.find((item) => item.id === selectedPatternId);
   const patternSignals = useMemo(
@@ -54,8 +48,8 @@ function App() {
           <span className="eyebrow">No active pattern</span>
           <h1>The evidence chain is empty.</h1>
           <p>
-            Saved data is missing a pattern, decision, or ship log entry.
-            Resetting restores the seeded demo.
+            Saved data is missing a pattern, decision, or ship log entry. Resetting
+            restores the seeded demo.
           </p>
           <button className="primary-button" type="button" onClick={resetDemo}>
             Reset to demo data
@@ -75,7 +69,12 @@ function App() {
             <span className="eyebrow">Director-Readable MVP</span>
             <h1>Trace every product decision back to evidence.</h1>
           </div>
-          <button className="icon-button" type="button" onClick={resetDemo} title="Reset demo data">
+          <button
+            className="icon-button"
+            type="button"
+            onClick={resetDemo}
+            title="Reset demo data"
+          >
             <RotateCcw size={18} aria-hidden="true" />
           </button>
         </header>

@@ -40,8 +40,8 @@ export function Sidebar() {
       <div className="sidebar-card">
         <span className="eyebrow">Operating Model</span>
         <p>
-          Product owns outcomes and scope. Design owns clarity and tone.
-          Engineering owns reliability and state.
+          Product owns outcomes and scope. Design owns clarity and tone. Engineering owns
+          reliability and state.
         </p>
       </div>
     </aside>

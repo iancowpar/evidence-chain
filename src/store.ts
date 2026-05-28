@@ -134,8 +134,7 @@ const demoPattern: Pattern = {
       "In scope because trust is a prerequisite for repeat behavior and retention.",
     designFriction:
       "Sync and recovery cues are split across surfaces, so users have to infer state.",
-    toneRisk:
-      "Over-explaining state could make the product feel fragile or technical.",
+    toneRisk: "Over-explaining state could make the product feel fragile or technical.",
     engineeringRisk:
       "Origin-specific local storage, session state, and PIN recovery need explicit handling.",
     stateReliabilityConcern:
